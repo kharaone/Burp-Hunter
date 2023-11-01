@@ -45,9 +45,9 @@ public class BurpExtender implements IBurpExtender, IMessageEditorTabFactory, IH
         
         callbacks.setExtensionName ("Burp Hunter");
         
-        String loaded = "Burp Hunter by Jason Calvert\n================================\n"+
+        String loaded = "v1.1\nBurp Hunter by Jason Calvert\nadapted by Karim Adala\n================================\n"+
                 "This extension will perform injections for all \"in scope\" HTTP request made through Burp and will record the request at the specified XSS Hunter domain.\n"+
-                "Use your own XSS Hunter domain or create one at https://xsshunter.com/";
+                "Use your own XSS Hunter domain or use one at https://xsshunter.trufflesecurity.com/";
         callbacks.printOutput(loaded);
         
          // create config UI

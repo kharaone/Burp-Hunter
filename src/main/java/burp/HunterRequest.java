@@ -107,7 +107,7 @@ public class HunterRequest {
                     callbacks.printOutput("Recorded Injection: "+injectKey);
                 }
             } catch (Exception ex) {
-                callbacks.printError("Unable to record injection on the host: api"+hunterDomain.substring(hunterDomain.indexOf(".")));
+                callbacks.printError("Unable to record injection on the host: "+hunterDomain +"\n"+ex.toString());
             }
         }
         return content;
@@ -118,11 +118,12 @@ public class HunterRequest {
             String request = new String(content);
             SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, (certificate, authType) -> true).build();
             HttpClient httpclient = HttpClients.custom().setSSLContext(sslContext).setSSLHostnameVerifier(new NoopHostnameVerifier()).build();
-            HttpPost httpPost = new HttpPost("https://api"+hunterDomain.substring(hunterDomain.indexOf("."))+"/api/record_injection");
+            HttpPost httpPost = new HttpPost("https://"+hunterDomain+"/api/v1/record_injection");
             String json = "{\"request\": \""+request.replace("\\", "\\\\").replace("\"", "\\\"").replace("\r\n", "\\n")+"\", \"owner_correlation_key\": \""+hunterKey+"\", \"injection_key\": \""+injectKey+"\"}";
             StringEntity entity = new StringEntity(json);
-            entity.setContentType("applicaiton/json");
+            entity.setContentType("application/json");
             httpPost.setEntity(entity);
+            httpPost.setHeader("X-CSRF-Buster", "true");
             HttpResponse response = httpclient.execute(httpPost);
             String responseString = new BasicResponseHandler().handleResponse(response);
             return responseString;
